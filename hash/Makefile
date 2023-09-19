@@ -1,21 +1,29 @@
-.PHONY: install test clear
+.PHONY: install test report clear
 
 NAME = test_env
 
 SHELL := bash
 python = python3
 
-ifeq ($(OS),Windows_NT)
+ifeq ($(OS), Windows_NT)
 	python := python
 endif
 
+ifdef user
+	pip_user_option = --user
+endif
+
 install:
-	pip install $(pip_user_option) --upgrade pip \
-	pip install $(pip_user_option) -r requirements.txt 
+	$(python) -m pip install $(pip_user_option) --upgrade pip
+	$(python) -m pip install $(pip_user_option) -r requirements.txt 
 
 test:
-	pytest -v -s test_hash_level2.py
+	$(python) -W ignore::DeprecationWarning -m pytest -v -s tests/
+
+report:
+	$(python) -W ignore::DeprecationWarning -m pytest -v -s tests/ --html=report.html --self-contained-html
 
 clear:
 	@rm -fr __pycache__ \
-	@rm -fr .pytest_cache
+	@rm -fr .pytest_cache \
+	@rm -fr report.html

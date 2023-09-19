@@ -1,4 +1,4 @@
-.PHONY: install test clear
+.PHONY: install test report clear
 
 NAME = test_env
 
